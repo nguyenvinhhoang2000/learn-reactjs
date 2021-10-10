@@ -66,7 +66,7 @@ export default function Header() {
 
           <Typography variant="h6" className={classes.title}>
             <Link className={classes.link} to="/">
-              Zĩnh Hoàng
+              ZZĩnh Hoàng
             </Link>
           </Typography>
 
