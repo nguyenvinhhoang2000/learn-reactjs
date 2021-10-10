@@ -1,4 +1,4 @@
-import { Box, IconButton } from '@material-ui/core';
+import { Box, IconButton, Menu, MenuItem } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -11,7 +11,9 @@ import { AccountCircle, Close } from '@material-ui/icons';
 import CodeIcon from '@material-ui/icons/Code';
 import Login from 'features/Auth/components/Login';
 import Register from 'features/Auth/components/Register';
+import { logout } from 'features/Auth/userSlice';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 
@@ -44,11 +46,14 @@ const MODE = {
 };
 
 export default function Header() {
+  const classes = useStyles();
+  const dispath = useDispatch();
   const loggedInUser = useSelector((state) => state.user.current);
   const isLoggedIn = !!loggedInUser.id;
-  const classes = useStyles();
+
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(MODE.LOGIN);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -56,6 +61,20 @@ export default function Header() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogoutClick = () => {
+    const action = logout();
+    dispath(action);
+    handleCloseMenu();
   };
 
   return (
@@ -66,7 +85,7 @@ export default function Header() {
 
           <Typography variant="h6" className={classes.title}>
             <Link className={classes.link} to="/">
-              ZZĩnh Hoàng
+              Zĩnh Hoàng
             </Link>
           </Typography>
 
@@ -89,12 +108,31 @@ export default function Header() {
           )}
 
           {isLoggedIn && (
-            <IconButton color="inherit">
+            <IconButton color="inherit" onClick={handleClick}>
               <AccountCircle />
             </IconButton>
           )}
         </Toolbar>
       </AppBar>
+
+      <Menu
+        id="demo-positioned-menu"
+        aria-labelledby="demo-positioned-button"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
+        <MenuItem onClick={handleLogoutClick}>Đăng xuất</MenuItem>
+      </Menu>
 
       <Dialog
         disableEscapeKeyDown
