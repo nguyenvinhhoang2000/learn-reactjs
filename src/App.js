@@ -1,4 +1,5 @@
 import Header from 'components/Header';
+import ProductFeature from 'features/Product';
 import { useEffect } from 'react';
 import { Route, Switch } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -15,6 +16,8 @@ function App() {
       <Switch>
         <Route path="/todos" component={TodoFeature} />
         <Route path="/count" component={CounterFeature} />
+        <Route path="/" component={ProductFeature} />
+
         <Route component={NotFound} />
       </Switch>
     </div>
